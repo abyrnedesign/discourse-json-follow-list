@@ -9,9 +9,9 @@ module JsonFollowList
 
 			#request post from usrs AND specific topics ahhhhhhh!
 			posts = Post.where('user_id IN (?) OR topic_id IN (?)', uid, tid )
-			 									.order(created_at: :desc)
-			                 	.limit(params["total"])
-												.offset(params["start"])
+					.order(created_at: :desc)
+					.limit(params["total"])
+					.offset(params["start"])
 
 			#Render a json object OMG!
 			obj = {follow_posts: posts }
