@@ -1,0 +1,4 @@
+plugins:
+  following_list_enabled:
+    default: true
+    client: true
