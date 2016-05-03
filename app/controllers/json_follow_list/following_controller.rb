@@ -2,6 +2,9 @@ module JsonFollowList
 	class FollowingController < ::ApplicationController
 		requires_plugin 'json-follow-list'
 
+		skip_before_filter :check_xhr #allow API requests
+    		before_filter :ensure_logged_in #or just check the users logged in
+
 		def topics
 			# Magically make arrays from string Wooooo!
 			uid = params["uid"].split(",")
