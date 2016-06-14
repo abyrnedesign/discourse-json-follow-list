@@ -9,9 +9,10 @@ module JsonFollowList
 			# Magically make arrays from string Wooooo!
 			uid = params["uid"].split(",")
 			tid = params["tid"].split(",")
+			username = params["username"]
 
 			#request post from usrs AND specific topics ahhhhhhh!
-			posts = Post.where('user_id IN (?) OR topic_id IN (?) OR raw LIKE (?)', uid, tid, '%@everyone%' )
+			posts = Post.where('user_id IN (?) OR topic_id IN (?) OR raw LIKE (?) OR raw LIKE (?)', uid, tid, '%@{username}%', '%@everyone%' )
 			 									.order(created_at: :desc)
 			                 	.limit(params["total"])
 												.offset(params["start"])
