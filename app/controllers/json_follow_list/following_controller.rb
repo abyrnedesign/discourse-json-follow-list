@@ -18,7 +18,10 @@ module JsonFollowList
 												.offset(params["start"])
 
 			# that cleaned that up
-			render_json_dump(serialize_data(posts, PostSerializer))
+			render_json_dump(serialize_data(posts, PostSerializer,
+																						 add_raw: true,
+																						 add_title: true
+																						 ))
 			#K shows over
 		end
 	end
