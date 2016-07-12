@@ -7,15 +7,40 @@ module JsonFollowList
 
 		def topics
 			# Magically make arrays from string Wooooo!
-			uid = params["uid"].split(",")
-			tid = params["tid"].split(",")
-			username = "%@" + params["usn"] + "%"
 
-			#request post from usrs AND specific topics ahhhhhhh!
-			posts = Post.where('user_id IN (?) OR topic_id IN (?) OR raw LIKE (?)', uid, tid, username )
-			 									.order(created_at: :desc)
-			                 	.limit(params["total"])
-												.offset(params["start"])
+
+			if params["uid"]
+				uid = params["uid"].split(",")
+			else
+				uid = ''
+			end
+
+			if params["tid"]
+				tid = params["tid"].split(",")
+			else
+				tid = ''
+			end
+
+			if params["usn"]
+				username = "%@" + params["usn"] + "%"
+			else
+				username = ''
+			end
+
+			if params["grp"] && !params["grp"].empty?
+				group = "%@" + params["grp"] + "%"
+				posts = Post.where('user_id IN (?) OR topic_id IN (?) OR raw LIKE (?) OR raw LIKE (?)', uid, tid, username, group)
+													.order(created_at: :desc)
+													.limit(params["total"])
+													.offset(params["start"])
+
+			else
+				posts = Post.where('user_id IN (?) OR topic_id IN (?) OR raw LIKE (?)', uid, tid, username)
+													.order(created_at: :desc)
+													.limit(params["total"])
+													.offset(params["start"])
+			end
+
 
 			# that cleaned that up
 			render_json_dump(serialize_data(posts, PostSerializer,
