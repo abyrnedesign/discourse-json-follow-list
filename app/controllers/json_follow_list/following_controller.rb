@@ -26,19 +26,12 @@ module JsonFollowList
 				username = ''
 			end
 
-			## look up the posts
-			excludetopic = Post.unscoped {
-				Post.select('DISTINCT topic_id').where('deleted_at IS NOT NULL').map(&:topic_id)
-			}
-
 			## look up the topics
 			includeUser = Topic.unscoped {
 				Topic.select('DISTINCT id').where('user_id IN (?) AND deleted_at IS NULL', uid).map(&:id)
 			}
 
-			#subtract the bad and add the good
-			tquery = tid - excludetopic
-			tquery =  includeUser + tquery
+			tquery =  includeUser + tid
 
 			#test for a group
 			if params["grp"] && !params["grp"].empty?
